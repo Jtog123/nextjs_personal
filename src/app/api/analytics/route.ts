@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { initializeOnce } from '@/app/lib/initDB'
 
 export async function POST(request: NextRequest){
     // gets the post request from the client and does something with it
 
     try {
+
+        //init the db only once
+        await initializeOnce();
+
         //extract the request convert to json
         const body = await request.json();
         const { platform_sent } = body;

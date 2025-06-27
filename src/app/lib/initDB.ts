@@ -116,5 +116,15 @@ const initDB = async() => {
 
 }
 
+let dbInitialized = false;
+
+async function initializeOnce() {
+    if(!dbInitialized) {
+        await initDB();
+        dbInitialized = true;
+        console.log("DB was initted once on server start");
+    }
+}
+
 //export for the route handler
-export {initDB};
+export {initDB, initializeOnce};
