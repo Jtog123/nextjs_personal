@@ -53,6 +53,10 @@ const createTables = async(pool : Pool) => {
 
 }
 
+
+//declare the pool
+let pool: Pool | null = null;
+
 const initDB = async() => {
         //try client i guess
 
@@ -84,14 +88,13 @@ const initDB = async() => {
 
 
     //establish connection with new DB
-    const pool = new Pool( {
+    pool = new Pool( {
         host: process.env.PG_HOST,
         user: process.env.PG_USER,
         password: process.env.PG_PASS,
         database:process.env.PG_NEW_DB,
         port: Number(process.env.PG_PORT)
     });
-
 
 
     try {
@@ -111,13 +114,22 @@ const initDB = async() => {
     }
 
 
-    console.log(`Ending pool connection ${process.env.PG_NEW_DB}`);
-    await pool.end();
+    //console.log(`Ending pool connection ${process.env.PG_NEW_DB}`);
+    //await pool.end();
 
 }
 
-let dbInitialized = false;
 
+/*
+function getPool(): Pool {
+    if(! pool) {
+        throw new Error('Pool not initialized. Call initDB() first');
+    }
+    return pool;
+}
+*/
+
+let dbInitialized = false;
 async function initializeOnce() {
     if(!dbInitialized) {
         await initDB();
@@ -126,5 +138,22 @@ async function initializeOnce() {
     }
 }
 
+async function populateTable(platform : string) {
+
+    if(!pool) {
+        throw new Error('Database pool not initialzed. Call initDB() first');
+    }
+
+    try {
+        //query INSERT INTO
+        console.log("adding to DB", platform);
+    } catch(err) {
+        console.error("Error: ", err);
+        throw err;
+    }
+
+    
+}
+
 //export for the route handler
-export {initDB, initializeOnce};
+export {initDB, initializeOnce, populateTable};

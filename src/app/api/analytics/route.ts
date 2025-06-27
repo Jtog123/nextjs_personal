@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { initializeOnce } from '@/app/lib/initDB'
+import { initializeOnce, populateTable } from '@/app/lib/initDB'
 
 export async function POST(request: NextRequest){
     // gets the post request from the client and does something with it
@@ -16,7 +16,10 @@ export async function POST(request: NextRequest){
         console.log("REceived platform: ", platform_sent);
 
         //send to DB
-        //const result = await db.insert(...)
+        const result = await populateTable(platform_sent);
+        console.log(result);
+
+
 
 
         //send resopse back to client
